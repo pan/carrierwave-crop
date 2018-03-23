@@ -12,7 +12,7 @@ module CarrierWave
         # @param attachment [Symbol] Name of the attachment attribute to be cropped
         def crop_uploaded(attachment)
 
-          [:crop_x, :crop_y, :crop_w, :crop_h].each do |a|
+          [:crop_x, :crop_y, :crop_w, :crop_h, :cropped].each do |a|
             attr_accessor :"#{attachment}_#{a}"
           end
           after_update :"recreate_#{attachment}_versions"
@@ -24,14 +24,15 @@ module CarrierWave
       module InstanceMethods
 
         # Checks if the attachment received cropping attributes
-        # @param  attachment [Symbol] Name of the attribute to be croppedv
+        # @param  attachment [Symbol] Name of the attribute to be cropped
         #
         # @return [Boolean]
         def cropping?(attachment)
           !self.send(:"#{attachment}_crop_x").blank? &&
             !self.send(:"#{attachment}_crop_y").blank? &&
             !self.send(:"#{attachment}_crop_w").blank? &&
-            !self.send(:"#{attachment}_crop_h").blank?
+            !self.send(:"#{attachment}_crop_h").blank? &&
+            !self.send(:"#{attachment}_cropped")
         end
 
         # method_missing is used to respond to the model callback
@@ -89,6 +90,7 @@ module CarrierWave
                   img
                 end
               end
+              model.send("#{attachment}_cropped=", true)
 
             rescue Exception => e
               raise CarrierWave::Crop::ProcessingError, "Failed to crop - #{e.message}"
