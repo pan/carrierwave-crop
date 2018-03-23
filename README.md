@@ -108,7 +108,7 @@ If there are no versions, and original file is to be cropped directly then call 
 
 ##NOTES
 
-1. Current Documentation is for **CarrierWave-Crop v0.1.2**
+1. Current Documentation is for **CarrierWave-Crop v0.2.0**
 2. Supports processors `rmagick` and `mini-magick`.
 
    **To use `rmagick`, add it in your `Gemfile` as:**
@@ -168,7 +168,20 @@ If there are no versions, and original file is to be cropped directly then call 
           resize_to_limit(100,100)
         end
 
+   To resize the image to a particular dimension after cropping, pass two more
+arguments `width` and `height` and option `resize_after_crop: true`
+
+          process crop: [:avatar, 300, 300, resize_after_crop: true]
+
+### ChangeLog
+v0.2.0
+  Fixed issue copping more than one time if saved more than 1 time
+  Added a new feature to resize image to a particular dimension after cropping
+
 ### Credits and resources
 * [CarrierWave](https://github.com/carrierwaveuploader/carrierwave)
 * [Deep Liquid's JCrop](http://deepliquid.com/content/Jcrop.html)
 * And Ryan Bates [Railscast#182](http://railscasts.com/episodes/182-cropping-images/)
+
+### Versioning
+The changes are following [semantic](https://semver.org) versioning rules

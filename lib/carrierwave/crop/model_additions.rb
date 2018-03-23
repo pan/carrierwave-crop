@@ -64,11 +64,16 @@ module CarrierWave
       #  On original version of attachment
       #  process crop: :avatar  
       #
-      #  Resizes the original image to 600x600 and then performs cropping 
-      #  process crop: [:avatar, 600, 600]  
+      #  Resizes the original image to the limit 600x600 and then performs
+      #  cropping process crop: [:avatar, 600, 600]
       #
-      # @param attachment [Symbol] Name of the attachment attribute to be cropped
-      def crop(attachment, width = nil, height = nil)
+      #  Performs cropping the image first and then resize the cropp'ed image
+      #  to the limit 300x300
+      #  process crop: [:avatar, 300, 300, resize_after_crop: true]
+      #
+      # @param attachment [Symbol] Name of the attachment attribute to be
+      # cropped
+      def crop(attachment, width = nil, height = nil, **opt)
         if model.cropping?(attachment)
           x = model.send("#{attachment}_crop_x").to_i
           y = model.send("#{attachment}_crop_y").to_i
@@ -79,7 +84,7 @@ module CarrierWave
           if self.respond_to? "resize_to_limit"
 
             begin
-              if width && height
+              if width && height && !opt[:resize_after_crop]
                 resize_to_limit(width, height)
               end
               manipulate! do |img|
@@ -89,6 +94,9 @@ module CarrierWave
                   img.crop("#{w}x#{h}+#{x}+#{y}")
                   img
                 end
+              end
+              if width && height && opt[:resize_after_crop]
+                resize_to_limit(width, height)
               end
               model.send("#{attachment}_cropped=", true)
 
