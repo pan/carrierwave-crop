@@ -169,7 +169,9 @@ If there are no versions, and original file is to be cropped directly then call 
         end
 
    To resize the image to a particular dimension after cropping, pass two more
-arguments `width` and `height` and option `resize_after_crop: true`
+arguments `width`, `height` and set option `resize_after_crop: true`
+This is especially useful in the situation that the orignal image should not be
+resized to a particular dimensions before cropping and the resizing is needed only after the original image is cropped.
 
           process crop: [:avatar, 300, 300, resize_after_crop: true]
 
