@@ -178,6 +178,7 @@ resized to a particular dimensions before cropping and the resizing is needed on
 ### ChangeLog
 v0.2.0
   Fixed issue copping more than one time if saved more than 1 time
+  Fixed issue Jcrop.gif is not found in production mode
   Added a new feature to resize image to a particular dimension after cropping
 
 ### Credits and resources
